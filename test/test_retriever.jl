@@ -1,8 +1,5 @@
 #!/usr/bin/env julia
 
-using PyCall
-using SQLite
-using MySQL
 
 os = pyimport("os")
 

@@ -1,11 +1,9 @@
-#!/usr/bin/env julia
+# !/usr/bin/env julia
+using MySQL
 using Pkg
-push!(LOAD_PATH,"../src/Retriever.jl")
-include("../src/Retriever.jl")
-
-Pkg.add("SQLite")
-Pkg.add("MySQL")
-
+using PyCall
+using Retriever
+using SQLite
 using Test
 
 # Run tests
