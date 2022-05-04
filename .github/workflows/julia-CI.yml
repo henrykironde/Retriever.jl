@@ -140,7 +140,7 @@ jobs:
       #   ${{ matrix.os }} ${{ matrix.architecture }}
 
       - name: Setup julia
-      - uses: julia-actions/setup-julia@v1
+        uses: julia-actions/setup-julia@v1
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
