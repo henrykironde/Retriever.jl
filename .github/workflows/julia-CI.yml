@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['1.0', '1.5'] #, '1.6', 'nightly']
+        version: ['1.5', 'nightly']
         # version: # julia-version: ['1.0', '1.4', '1.5', '1.6', 'nightly']
           # - '1.0' # lowest supported version
           # - '1'   # last released version
