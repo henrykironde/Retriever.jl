@@ -140,11 +140,10 @@ jobs:
       #   ${{ matrix.os }} ${{ matrix.architecture }}
 
       - name: Setup julia
-        uses: julia-actions/setup-julia@v1
+      - uses: julia-actions/setup-julia@v1
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
-          show-versioninfo: true
       - uses: actions/cache@v1
         env:
           cache-name: cache-artifacts
@@ -155,74 +154,108 @@ jobs:
             ${{ runner.os }}-test-${{ env.cache-name }}-
             ${{ runner.os }}-test-
             ${{ runner.os }}-
-
       - uses: julia-actions/julia-buildpkg@v1
-#         env:
-#           PYTHON : ${{ env.pythonLocation }}
-#           PYCALL_JL_RUNTIME_PYTHONHOME: ${{ env.pythonLocation }}
-#           PYCALL_JL_RUNTIME: ${{ env.pythonLocation }}
-      - run: |
-          julia  -e '
-          using Pkg
-          Pkg = Base.require(Base.PkgId(Base.UUID(0x44cfe95a1eb252eab672e2afdf69b78f), "Pkg"))
-          Pkg.build("PyCall")
-          using PyCall
-          run(`$(PyCall.pyprogramname) -m pip install --user  -- git+https://git@github.com/weecology/retriever.git`)
-          Pkg.develop(PackageSpec(path=pwd()))
-          Pkg.instantiate()'
-
-      # - uses: julia-actions/julia-buildpkg@v1
-      #   env:
-      #     PYTHON : python
-      # - run: |
-      #     julia -e '
-      #       using Pkg
-      #       Pkg.develop(PackageSpec(path=pwd()))
-      #       Pkg.instantiate()
-      #       using Retriever
-      #       Pkg.test("Retriever")'
-#       - uses: julia-actions/julia-runtest@v1
+      - uses: julia-actions/julia-runtest@v1
       - uses: julia-actions/julia-processcoverage@v1
       - uses: codecov/codecov-action@v1
         with:
           file: lcov.info
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+#         uses: julia-actions/setup-julia@v1
+#         with:
+#           version: ${{ matrix.version }}
+#           arch: ${{ matrix.arch }}
+#           show-versioninfo: true
+#       - uses: actions/cache@v1
+#         env:
+#           cache-name: cache-artifacts
+#         with:
+#           path: ~/.julia/artifacts
+#           key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('**/Project.toml') }}
+#           restore-keys: |
+#             ${{ runner.os }}-test-${{ env.cache-name }}-
+#             ${{ runner.os }}-test-
+#             ${{ runner.os }}-
 
-      - name: Documentation
-        uses: julia-actions/setup-julia@v1
-        with:
-          version: ${{ matrix.version }}
-          arch: ${{ matrix.arch }}
-          show-versioninfo: true
-#       if: github.event_name != 'pull_request' && matrix.julia-version == "1":
-#       # if: github.event_name != 'pull_request' && matrix.julia-version == "1"
-#       if: ${{ github.event_name == 'pull_request' && matrix.python-version != '3.7' && matrix.os == 'ubuntu-latest' && matrix.julia-version == '1' }}
-      - run: |
-          julia --project=docs -e '
-            using Pkg
-            Pkg.add("PyCall")
-            using PyCall
-            run(`$(PyCall.pyprogramname) -m pip install --user  -- git+https://git@github.com/weecology/retriever.git`)
-            Pkg.develop(PackageSpec(path=pwd()))
-            Pkg.instantiate()'
-      - run: |
-          julia --project=docs -e '
-            using Documenter: doctest
-            using Retriever
-            doctest(Retriever)'
-      - run: julia --project=docs docs/make.jl
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        #   DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
-      # - name: Run pytest
-      #   run: |
-      #     pytest -v -k "not test_geojson2csv  and not test_mysql_integration" --cov=./retriever --cov-report=xml
-      #     flake8 --ignore=E501,W503,E402,F401,F403,E722,F841,W504 retriever --max-line-length=90 2>&1
-      #     yapf -d --recursive ./retriever/ --style=.style.yapf 2>&1
+#       - uses: julia-actions/julia-buildpkg@v1
+# #         env:
+# #           PYTHON : ${{ env.pythonLocation }}
+# #           PYCALL_JL_RUNTIME_PYTHONHOME: ${{ env.pythonLocation }}
+# #           PYCALL_JL_RUNTIME: ${{ env.pythonLocation }}
+#       - run: |
+#           julia  -e '
+#           using Pkg
+#           Pkg = Base.require(Base.PkgId(Base.UUID(0x44cfe95a1eb252eab672e2afdf69b78f), "Pkg"))
+#           Pkg.build("PyCall")
+#           using PyCall
+#           run(`$(PyCall.pyprogramname) -m pip install --user  -- git+https://git@github.com/weecology/retriever.git`)
+#           Pkg.develop(PackageSpec(path=pwd()))
+#           Pkg.instantiate()'
 
-      # - name: Upload coverage to Codecov
-      #   if: matrix.python-version == 3.8
-      #   uses: codecov/codecov-action@v1
-      #   with:
-      #     token: ${{ secrets.CODECOV_TOKEN }}
+#       # - uses: julia-actions/julia-buildpkg@v1
+#       #   env:
+#       #     PYTHON : python
+#       # - run: |
+#       #     julia -e '
+#       #       using Pkg
+#       #       Pkg.develop(PackageSpec(path=pwd()))
+#       #       Pkg.instantiate()
+#       #       using Retriever
+#       #       Pkg.test("Retriever")'
+# #       - uses: julia-actions/julia-runtest@v1
+#       - uses: julia-actions/julia-processcoverage@v1
+#       - uses: codecov/codecov-action@v1
+#         with:
+#           file: lcov.info
+
+#       - name: Documentation
+#         uses: julia-actions/setup-julia@v1
+#         with:
+#           version: ${{ matrix.version }}
+#           arch: ${{ matrix.arch }}
+#           show-versioninfo: true
+# #       if: github.event_name != 'pull_request' && matrix.julia-version == "1":
+# #       # if: github.event_name != 'pull_request' && matrix.julia-version == "1"
+# #       if: ${{ github.event_name == 'pull_request' && matrix.python-version != '3.7' && matrix.os == 'ubuntu-latest' && matrix.julia-version == '1' }}
+#       - run: |
+#           julia --project=docs -e '
+#             using Pkg
+#             Pkg.add("PyCall")
+#             using PyCall
+#             run(`$(PyCall.pyprogramname) -m pip install --user  -- git+https://git@github.com/weecology/retriever.git`)
+#             Pkg.develop(PackageSpec(path=pwd()))
+#             Pkg.instantiate()'
+#       - run: |
+#           julia --project=docs -e '
+#             using Documenter: doctest
+#             using Retriever
+#             doctest(Retriever)'
+#       - run: julia --project=docs docs/make.jl
+#         # env:
+#         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         #   DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
+#       # - name: Run pytest
+#       #   run: |
+#       #     pytest -v -k "not test_geojson2csv  and not test_mysql_integration" --cov=./retriever --cov-report=xml
+#       #     flake8 --ignore=E501,W503,E402,F401,F403,E722,F841,W504 retriever --max-line-length=90 2>&1
+#       #     yapf -d --recursive ./retriever/ --style=.style.yapf 2>&1
+
+#       # - name: Upload coverage to Codecov
+#       #   if: matrix.python-version == 3.8
+#       #   uses: codecov/codecov-action@v1
+#       #   with:
+#       #     token: ${{ secrets.CODECOV_TOKEN }}
 
               
